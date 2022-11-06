@@ -1,5 +1,6 @@
 const { response } = require('express');
 var express = require('express');
+var bodyParser = require('body-parser')
 var app = express();
 
 app.locals.pretty = true;
@@ -8,7 +9,24 @@ app.set('view engine', 'jade');
 
 //public이라는 디렉토리에 정적인 파일 저장하면 사용자에게 서비스 할 수 있음.
 app.use(express.static('public'));    //사용자가 웹 서버에 접속하는 방식 설정, URL를 입력하여 접속 => get 방식
+app.use(bodyParser.urlencoded({ extended: false}))
 
+app.get('/form', function(req, res) {
+    res.render('form');
+})
+app.get('/form_receiver', function(req, res) {
+    var title = req.query.title;
+    var description = req.query.description;
+    res.send(title+','+description);
+})
+
+app.post('/form_receiver', function(req, res) {
+    var title = req.body.title;
+    var description = req.body.description;
+    res. send(title+','+description);
+})
+
+//파라미터 방식
 app.get('/topic/:id', function(req, res) {
     //id에 저장될 내용을 topics에 입력
     var topics = [
@@ -17,9 +35,9 @@ app.get('/topic/:id', function(req, res) {
         'Express is ...'
     ];
     var output = `
-    <a href = "/topic?id=0">JavaScript</a><br>
-    <a href = "/topic?id=1">Nodejs</a><br>
-    <a href = "/topic?id=2">Express</a><br><br>
+    <a href = "/topic/0">JavaScript</a><br>
+    <a href = "/topic/1">Nodejs</a><br>
+    <a href = "/topic/2">Express</a><br><br>
     ${topics[req.params.id]}
     `
     res.send(output);

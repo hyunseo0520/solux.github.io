@@ -1,0 +1,10 @@
+html
+    head
+        title= _title
+    body
+        h1 Hello Jade
+        ul 
+            // '-' 는 프로그래밍적으로 사용할 때 사용
+            -for (var i=0; i<5; i++)
+                li coding
+        div= time
